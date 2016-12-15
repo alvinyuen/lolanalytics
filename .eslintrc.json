@@ -1,0 +1,18 @@
+{
+    "extends": ["eslint:recommended", "eslint-plugin-react:recommended" ],
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "plugins": [ "react"],
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true
+    },
+    "rules": {
+        "semi": ["error", "always"],
+        "no-unused-vars": "warn",
+        "no-console":"off"
+    }
+}
+
