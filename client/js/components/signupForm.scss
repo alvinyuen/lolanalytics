@@ -1,0 +1,85 @@
+
+
+
+
+.signup-container {
+
+    width: 700px;
+    margin: 80px auto;
+    padding: 5px;
+    background-color: #e3e3e3;
+    border-radius:3px;
+
+
+.signup-title {
+    margin-top: 30px;
+    font-weight: 900;
+    font-family: 'Raleway';
+}
+
+.form-group {
+
+    label {
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 14px;
+        display:block;
+        text-align: left;
+        margin-left: 150px;
+
+    }
+
+    input {
+        margin: 5px;
+        width: 400px;
+        height:40px;
+        padding-left: 15px;
+        border: none;
+
+    }
+
+}
+
+.facebook-button {
+    margin: 10px;
+    background-color: #3b5998;
+    border-radius: 5px;
+    color: white;
+    height: 50px;
+    width: 400px;
+    font-size: 16px;
+    border: none;
+}
+
+.google-button {
+    margin: 5px;
+    background-color:#d34836;
+    border-radius: 5px;
+    color: white;
+    height: 50px;
+    width: 400px;
+    font-size: 16px;
+     border: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+.signup-button {
+     background-color: black;
+        border-radius: 5px;
+        color: white;
+        height: 50px;
+        width: 100px;
+        margin: 20px;
+}
+
+
+
+
+}
+
+.password-label {
+    color: black;
+}
