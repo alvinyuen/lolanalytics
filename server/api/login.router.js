@@ -6,8 +6,9 @@ const chalk = require('chalk');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
+
+//log in
 router.post('/', (req, res, next) => {
-    console.log('LOGGING IN:', req.body);
     passport.authenticate('local', function(err, user, info) {
     if (err) { return next(err); }
     if (!user) { return res.send(info); }
@@ -21,7 +22,6 @@ router.post('/', (req, res, next) => {
 });
 
 
-
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
@@ -29,12 +29,22 @@ passport.use(new LocalStrategy({
     User.findOne({
         where: {
             email: email,
-            password: password
         }
     })
     .then((user) => {
-        console.log('user found in local stragegy', user);
         if(!user){
+            done(null, false, {message: 'email or password is incorrect'});
+        }
+        else {
+            return Promise.all([
+                user.checkPassword(password),
+                user
+            ])
+        }
+    })
+    .then(result => {
+        const [passwordMatched, user] = result;
+        if(!passwordMatched) {
             done(null, false, {message: 'email or password is incorrect'});
         }
         else {
@@ -44,9 +54,9 @@ passport.use(new LocalStrategy({
     .catch(done);
 }));
 
+
+//check logged in status
 router.get('/check', (req, res, next) => {
-    console.log(chalk.red('retrieving user login status'));
-    console.log(`is user authencated : ${req.user} is ${req.isAuthenticated()}`);
     req.isAuthenticated() ? res.json(req.user) : res.json();
 });
 

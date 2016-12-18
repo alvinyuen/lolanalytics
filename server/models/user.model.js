@@ -1,6 +1,7 @@
 'use strict';
 
 const Sequelize = require('sequelize');
+const bcrypt = require('bcrypt-nodejs');
 
 
 
@@ -16,6 +17,44 @@ const User = db.define('user', {
     },
     password: Sequelize.STRING,
     googleId: Sequelize.STRING
+}, {
+
+    instanceMethods: {
+
+        hashPassword: function () {
+            return new Promise((resolve, reject) => {
+                bcrypt.genSalt(4, (err, salt) => {
+                    if(err){ return reject(err);}
+                    bcrypt.hash(this.password, salt, null, (err, hash) => {
+                        if(err){return reject(err);}
+                        this.password = hash;
+                        resolve();
+                    })
+                })
+            })
+        },
+
+        checkPassword: function(password) {
+            return new Promise((resolve, reject) => {
+                bcrypt.compare(password, this.password, (err, matched) => {
+                    if(err){return reject(err);}
+                    resolve(matched);
+                })
+            });
+        }
+
+    },
+    hooks: {
+        beforeCreate: function(user) {
+            return user.hashPassword();
+        },
+        beforeUpdate: function(user) {
+            if(!user.changed('password')){return;}
+            return user.hashPassword();
+        }
+
+    }
+
 });
 
 
