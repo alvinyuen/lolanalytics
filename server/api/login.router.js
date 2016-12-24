@@ -7,21 +7,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 
-//log in
-router.post('/', (req, res, next) => {
-    passport.authenticate('local', function(err, user, info) {
-    if (err) { return next(err); }
-    if (!user) { return res.send(info); }
-    else{
-       req.logIn(user, function(err) {
-        if (err) { return next(err); }
-        return res.send(user);
-        });
-    }
-  })(req, res, next)
-});
-
-
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
@@ -39,7 +24,7 @@ passport.use(new LocalStrategy({
             return Promise.all([
                 user.checkPassword(password),
                 user
-            ])
+            ]);
         }
     })
     .then(result => {
@@ -53,6 +38,20 @@ passport.use(new LocalStrategy({
     })
     .catch(done);
 }));
+
+//log in
+router.post('/', (req, res, next) => {
+    passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) { return res.send(info); }
+    else{
+       req.login(user, function(err) {
+        if (err) { return next(err); }
+        return res.send(user);
+        });
+    }
+  })(req, res, next);
+});
 
 
 //check logged in status

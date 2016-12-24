@@ -29,9 +29,9 @@ const User = db.define('user', {
                         if(err){return reject(err);}
                         this.password = hash;
                         resolve();
-                    })
-                })
-            })
+                    });
+                });
+            });
         },
 
         checkPassword: function(password) {
@@ -39,7 +39,7 @@ const User = db.define('user', {
                 bcrypt.compare(password, this.password, (err, matched) => {
                     if(err){return reject(err);}
                     resolve(matched);
-                })
+                });
             });
         }
 

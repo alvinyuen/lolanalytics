@@ -3,6 +3,8 @@
 
 const db = require('./_db');
 const User = require('./user.model');
+const Summoner = require('./summoner.model');
+
 
 
 //-----define associations here----//
@@ -11,5 +13,6 @@ const User = require('./user.model');
 
 module.exports = {
     db: db,
-    User: User
-}
+    User: User,
+    Summoner: Summoner,
+};

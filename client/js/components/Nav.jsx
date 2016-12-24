@@ -1,19 +1,36 @@
 import './nav.scss'
 
-import React, {Component} from 'react';
-import {Link} from 'react-router';
-import {connect} from 'react-redux';
-import {logOut} from '../redux/loginStatus';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { logOut } from '../redux/loginStatus';
+import { searchForSummoner } from '../redux/singleSummoner';
 
 class Nav extends Component {
 
     constructor(props) {
         super(props);
 
-        this.logOut = this
-            .logOut
-            .bind(this);
+        this.state = {
+            searchSummoner: '',
+            region: 'NA',
+        }
+
+        this.handleInput = this.handleInput.bind(this);
+        this.logOut = this.logOut.bind(this);
+        this.searchForSummoner = this.searchForSummoner.bind(this);
     }
+
+    handleInput(e){
+        console.log('type:', e.target.name);
+        this.setState({[e.target.name]: e.target.value});
+    }
+
+    searchForSummoner(){
+        console.log('search:', this.state.searchSummoner);
+        this.props.search(this.state.searchSummoner, this.state.region);
+    }
+
 
     logOut(){
         this.props.logOutUser();
@@ -29,15 +46,16 @@ class Nav extends Component {
                     <div className="nav-title float-left">
                         <div className="nav-title-item">
                             <a className="nav-title-link" href="/">
-                                Sneak Peak
+                                Riot
                             </a>
                         </div>
                     </div>
 
                     <div className="nav-right float-right">
                         <div className="nav-search">
-                            <i className="icon ion-search"></i>
-                            <input className="nav-search-input" placeholder="Search" type="text"/>
+                            <i className="icon ion-search" onClick={this.searchForSummoner}></i>
+                            <input className="nav-search-input" placeholder="Search" type="text" name="searchSummoner"
+                            onChange = {this.handleInput}/>
                         </div>
 
                       {!this.props.isLoggedIn ?
@@ -78,7 +96,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        logOutUser: () => dispatch(logOut())
+        logOutUser: () => dispatch(logOut()),
+        search: (summoner, region) => dispatch(searchForSummoner(summoner, region))
     }
 }
 

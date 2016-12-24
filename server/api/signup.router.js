@@ -25,7 +25,6 @@ router.post('/', (req, res, next) => {
             if (err) { return next(err); }
             return res.send(user);
         });
-
     });
 });
 

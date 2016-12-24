@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 import { Router, browserHistory as history} from "react-router";
 import { connect } from 'react-redux';
 import { checkLoginStatus } from '../redux/loginStatus'
+import { updateSearchedSummoners } from '../redux/searchedSummoners';
 
 //components
 import Nav from './Nav.jsx';
@@ -16,6 +17,11 @@ class AppContainer extends Component {
 
     constructor(props){
         super(props);
+    }
+
+    //should only run once when component renders?
+    componentDidMount(){
+        this.props.updateSearchedSummoners('NA');
     }
 
     componentDidUpdate(){
@@ -38,6 +44,7 @@ const mapStateToProps = (state, ownProps) => ({});
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         checkLoginStatus: () => dispatch(checkLoginStatus()),
+        updateSearchedSummoners: (region) => dispatch(updateSearchedSummoners(region))
     }
 }
 
