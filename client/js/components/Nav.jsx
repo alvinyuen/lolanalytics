@@ -46,7 +46,7 @@ class Nav extends Component {
                     <div className="nav-title float-left">
                         <div className="nav-title-item">
                             <a className="nav-title-link" href="/">
-                                Riot
+                                Riot Analytics
                             </a>
                         </div>
                     </div>

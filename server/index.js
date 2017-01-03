@@ -31,10 +31,11 @@ app.use(require('./middleware/session.middleware'));
 //passport middleware
 app.use(require('./middleware/passport.middleware'));
 
-
-
 //webscrapper
 app.use(require('./services/webscrapper-service'));
+
+//cron
+app.get(require('./services/cron'));
 
 // testing purposes
 // app.use('/*', (req, res, next) => {
@@ -75,7 +76,7 @@ const server = app.listen(port, (err)=> {
    if(err) throw err;
    db.sync()
    .then(()=> {
-       console.log(`sneakpeak server is connected to port ${port}`);
+       console.log(`riotanalytics server is connected to port ${port}`);
    });
 });
 

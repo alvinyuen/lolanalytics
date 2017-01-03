@@ -14,10 +14,10 @@ class GridContainer extends Component {
     }
 
     chunks(summoners) {
-        //chunks of 5
-        const chunk = 6;
+        //chunks of 10
+        const chunk = 10;
         var chunkArr = [];
-        for(var i = 0; i < summoners.length; i+=6){
+        for(var i = 0; i < summoners.length; i+=10){
             chunkArr.push(summoners.slice(i, i+chunk));
         }
         return chunkArr;
