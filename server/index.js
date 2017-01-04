@@ -56,6 +56,7 @@ app.get('/api/logout', (req, res, next) => {
 // -------- routes ------------ //
 app.use('/api/riot', require('./api/search.router'));
 app.use('/api/riot', require('./api/summoners.router'));
+app.use('/api/riot', require('./api/gameStats.router'));
 
 
 

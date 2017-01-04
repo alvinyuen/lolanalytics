@@ -7,7 +7,7 @@ const envVariables = require('../../env.json');
 const axios = require('axios');
 
 
-//update all summoners
+//find all summoners
 router.get('/summoners/:region', (req, res, next) => {
     const { region } = req.params;
     const riotKey = envVariables.riotApiKey;

@@ -1,13 +1,14 @@
 import './card.scss';
 
 import React, { Component } from 'react';
+import {Link} from 'react-router';
 
 
 
 const Card = ({summoner}) => {
     console.log('PROPS', summoner);
     return (
-        <div className="shoe-container">
+        <Link to="/playerStats"><div className="shoe-container">
             <div className="shoe-card">
                     <div className="shoe-card-image" >
                     <img src={`http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/${summoner.profileIconId}.png`}
@@ -27,7 +28,7 @@ const Card = ({summoner}) => {
 
                     </div>
             </div>
-        </div>
+        </div></Link>
     )
 }
 
