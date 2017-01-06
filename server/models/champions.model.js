@@ -5,9 +5,8 @@ const Sequelize = require('sequelize');
 const db = require('./_db');
 
 const Champion = db.define('champion', {
-
     name: {type: Sequelize.STRING},
-    key: {type: Sequelize.STRING},
+    championId: {type: Sequelize.INTEGER, primaryKey: true},
 },
 {
     hooks: {

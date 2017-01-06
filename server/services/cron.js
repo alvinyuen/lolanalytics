@@ -24,7 +24,7 @@ const region = 'NA';
         for(var champ in champions){
             Champion.create({
                 name: champions[champ].name,
-                key: champions[champ].key
+                championId: champions[champ].key
             });
         }
     });
@@ -92,15 +92,45 @@ const getRecentGamePlayers = (id) => {
             recentGames.games.forEach(game => {
             game.fellowPlayers.forEach(player => playerInGames.push(player.summonerId));
             const stats = game.stats;
+            const role = getPlayerRole(stats);
+
             //recent game stats (only ranked solo)
-            if(game.subType==='RANKED_SOLO_5x5')
-                        GameStats.create(Object.assign({gameId: game.gameId, summonerId: id, region: region, gameMode: game.gameMode, gameType: game.gameType, subType:game.subType, championId: game.championId, summonerUuid: summoner.uuid, createDate: game.createDate}, stats));
+            if(game.subType==='RANKED_SOLO_5x5' && role)
+                        GameStats.create(Object.assign({gameId: game.gameId, summonerId: id, region: region, gameMode: game.gameMode, gameType: game.gameType, subType:game.subType, championId: game.championId, role:role, summonerUuid: summoner.uuid, createDate: game.createDate}, stats))
+                        .then(gameStat => {
+                           Champion.findOne({where: {championId: game.championId}})
+                           .then(champion => {
+                               //add to join table
+                                gameStat.addChampions(champion);
+                           });
+                        })
+                        // constantly throws error with dup match and players
+                        .catch(console.error);
             });
+
         return playerInGames;
         });
     })
     .catch(console.err);
 };
+
+//determine player role in game
+const getPlayerRole = (stats) => {
+    if(stats.playerPosition===1)
+        return 'TOP';
+    else if(stats.playerPosition===2)
+        return 'MID';
+    else if(stats.playerPosition===3)
+        return 'JUNGLE';
+    else if(stats.playerRole===2)
+        return 'SUPPORT';
+    else if(stats.playerRole===3)
+        return 'CARRY';
+    else
+        return null;
+};
+
+
 
 
 

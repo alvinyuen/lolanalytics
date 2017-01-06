@@ -26,7 +26,7 @@ export default function searchedSummonersReducer ( searchedSummoners = [], actio
 /* ------ dispatcher ------- */
 export const updateSearchedSummoners = (region) => dispatch => {
     console.log('search summoner dispatcher', region);
-    axios.get(`/api/riot/summoners/${region}`)
+    axios.get(`/api/riot/summoners/all/${region}`)
     .then((res)=> dispatch(setSearchedSummoners(res.data)))
     .catch( err => console.error(`update searched summoners unsuccessful: ${err}`));
 };
