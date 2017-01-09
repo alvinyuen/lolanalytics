@@ -24,10 +24,36 @@ export default function searchedSummonersReducer ( searchedSummoners = [], actio
 };
 
 /* ------ dispatcher ------- */
-export const updateSearchedSummoners = (region) => dispatch => {
-    console.log('search summoner dispatcher', region);
-    axios.get(`/api/riot/summoners/all/${region}`)
+export const updateSearchedSummoners = () => dispatch => {
+    axios.get(`/api/riot/summoners/allInfo/all`)
     .then((res)=> dispatch(setSearchedSummoners(res.data)))
     .catch( err => console.error(`update searched summoners unsuccessful: ${err}`));
 };
+
+//with selected options
+export const updateSearchedSummonersWithOptions = (region, championName) => dispatch => {
+    console.log('region:',region);
+    console.log('championName', championName);
+    if(region==='ALL' && championName==='ALL'){
+        axios.get(`/api/riot/summoners/allInfo/all`)
+            .then((res)=> dispatch(setSearchedSummoners(res.data)))
+            .catch( err => console.error(`update searched summoners unsuccessful: ${err}`));
+    }
+    else if(region==='ALL' && championName!=='ALL'){
+         axios.get(`/api/riot/summoners/allInfo/champion/${championName}`)
+            .then((res)=> dispatch(setSearchedSummoners(res.data)))
+            .catch( err => console.error(`update searched summoners unsuccessful: ${err}`));
+    }
+    else if(region!=='ALL' && championName==='ALL'){
+         axios.get(`/api/riot/summoners/allInfo/region/${region}`)
+            .then((res)=> dispatch(setSearchedSummoners(res.data)))
+            .catch( err => console.error(`update searched summoners unsuccessful: ${err}`));
+    }
+    else if (region!=='ALL' && championName!=='ALL'){
+         axios.get(`/api/riot/summoners/allInfo/regionAndChampion/${region}/${championName}`)
+            .then((res)=> dispatch(setSearchedSummoners(res.data)))
+            .catch( err => console.error(`update searched summoners unsuccessful: ${err}`));
+    }
+
+}
 

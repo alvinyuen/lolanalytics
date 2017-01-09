@@ -21,12 +21,12 @@ class AppContainer extends Component {
 
     //should only run once when component renders?
     componentDidMount(){
-        this.props.updateSearchedSummoners('NA');
+        this.props.updateSearchedSummoners();
     }
 
-    componentDidUpdate(){
-        this.props.checkLoginStatus();
-    }
+    // componentDidUpdate(){
+    //     this.props.checkLoginStatus();
+    // }
 
     render(){
         console.log('APP CONTAINER RENDER')
@@ -44,7 +44,7 @@ const mapStateToProps = (state, ownProps) => ({});
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         checkLoginStatus: () => dispatch(checkLoginStatus()),
-        updateSearchedSummoners: (region) => dispatch(updateSearchedSummoners(region))
+        updateSearchedSummoners: () => dispatch(updateSearchedSummoners())
     }
 }
 

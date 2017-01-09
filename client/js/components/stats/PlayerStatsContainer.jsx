@@ -43,12 +43,12 @@ var config = {
     chart: {
             polar: true,
             type: 'line',
-            width: 420,
-            backgroundColor: '#f4f4f4'
+            width: 400,
+            backgroundColor: '#fff'
         },
         title: {
-            text: null,
-            x: -80
+            text: 'MID',
+            // x: -80
         },
         pane: {
             size: '80%'
@@ -78,12 +78,32 @@ var config = {
             data: [50000, 39000, 42000, 31000, 26000, 14000, 12509, 12509, 93406, 34069, 9346, 22946, 19236],
             pointPlacement: 'on'
         }]
-
-
 };
 
 export default class ReactHighChart extends Component {
     render(){
-       return <ReactHighcharts config = {config}></ReactHighcharts>
+       return (
+           <div className="playerContainer clearfix">
+            &nbsp;
+            <div>
+                <div className="highCharts">
+                    <ReactHighcharts config = {config}></ReactHighcharts>
+                </div>
+                <div className="highCharts">
+                    <ReactHighcharts config = {config}></ReactHighcharts>
+                </div>
+                <div className="highCharts">
+                    <ReactHighcharts config = {config}></ReactHighcharts>
+                </div>
+            </div>
+            <div className="bottomCharts">
+                 <div className="highCharts">
+                    <ReactHighcharts config = {config}></ReactHighcharts>
+                </div>
+                <div className="highCharts">
+                    <ReactHighcharts config = {config}></ReactHighcharts>
+                </div>
+            </div>
+        </div>)
     }
 }

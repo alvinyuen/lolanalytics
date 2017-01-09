@@ -72,8 +72,8 @@ const getSummonerProfile = (id) => {
                 const summonerWithRegion = Object.assign({}, apiInfo[key], {region: `${region}`});
                 return Summoner.updateOrCreateSummoner(summonerWithRegion);
             }));
-    })
-    .catch(console.err);
+    });
+    // .catch(console.err);
 };
 
 //get recent game stats
@@ -103,15 +103,15 @@ const getRecentGamePlayers = (id) => {
                                //add to join table
                                 gameStat.addChampions(champion);
                            });
-                        })
+                        });
                         // constantly throws error with dup match and players
-                        .catch(console.error);
+                        // .catch(console.error);
             });
 
         return playerInGames;
         });
-    })
-    .catch(console.err);
+    });
+    // .catch(console.err);
 };
 
 //determine player role in game

@@ -1,16 +1,17 @@
 const elasticSearch = require('elasticsearch');
-const GameStats = require('../models/gameStats.model');
-const Summoner = require('../models/summoner.model');
-const Champion = require('../models/summoner.model');
+const { GameStats, Summoner, Champion } = require('../models/db');
 
-//log all errors
-//esClient object to communicate with Elasticsearch
+
+/*
+    esClient object to communicate with Elasticsearch
+    log all errors
+*/
 const esClient = new elasticSearch.Client({
     host: '127.0.0.1:9200',
     log: 'error'
 });
 
-/* index related */
+/* bulk index ingestion */
 const bulkIndex = function bulkIndex(index, type, data) {
     let bulkBody = [];
 
@@ -22,97 +23,126 @@ const bulkIndex = function bulkIndex(index, type, data) {
           _id: gameStats.id
         }
       });
-
       bulkBody.push(gameStats);
     });
 
-    esClient.bulk({body: bulkBody})
-    .then(response => {
-      let errorCount = 0;
-      response.items.forEach(item => {
-        if (item.index && item.index.error) {
-          console.log(++errorCount, item.index.error);
-        }
-      });
-      console.log(`Successfully indexed ${data.length - errorCount} out of ${data.length} items`);
-    })
-    .catch(console.err);
+    return esClient.bulk({body: bulkBody})
+        .then(response => {
+            let errorCount = 0;
+                response.items.forEach(item => {
+                    if (item.index && item.index.error) {
+                    console.log(++errorCount, item.index.error);
+                    }
+                });
+            console.log(`Successfully indexed ${data.length - errorCount} out of ${data.length} items`);
+        });
 };
 
-
+/* indexing one */
 const indexOne = function indexOne(index, type, data){
-    esClient.index({
-    index: index,
-    id: data.id,
-    type: type,
-    body: data
-    },function(err,resp,status) {
-        console.log(resp);
+    return esClient.index({
+        index: index,
+        id: data.id,
+        type: type,
+        body: data
     });
 };
 
 
-
-//delete all
+/* delete an index */
 const deleteAllIndex = function deleteAllIndex(index){
-  esClient.indices.delete({index: index}, function(err, resp, status){
-     console.log("delete:", resp, "status:", status);
-  });
+    return esClient.indices.delete({index: index});
 };
 
+/* define mappings for index 'riot */
+const defineMapping = function defineMapping (){
+       esClient.indices.putMapping({
+                index: 'riot',
+                type: 'summoners',
+                body: {
+                    properties: {
+                        'gameStats.totalDamageDealtToBuildingsPerMin': {
+                            'type': 'float', // type is a required attribute if index is specified
+                        },
+                        'gameStats.visionWardsBoughtPerFiveMin': {
+                            'type': 'float'
+                        },
+                        'gameStats.totalDamageTakenPerMin': {
+                            'type': 'float'
+                        },
+                        'gameStats.totalDamageDealtPerMin': {
+                            'type': 'float'
+                        },
+                        'gameStats.totalDamageDealtToChampionsPerMin': {
+                            'type': 'float'
+                        },
+                        'gameStats.wardPlacedPerFiveMin': {
+                            'type': 'float'
+                        },
+                        'gameStats.wardKilledPerFiveMin': {
+                            'type': 'float'
+                        }
+                    }
+                }
+            })
+            .then(mappingCreated=> {
+               console.log('mappings created');
+               getMapping('riot');
+            });
+};
 
-
-
-/* Search related */
-const searchAll = function searchAll(index, body) {
-  return esClient.search({
-      index: index,
-      body: {
-      size: 20,
-      from: 0,
-      query: {
-         match_all: {}
-      }
-   }})
-   .then(results => {
-        console.log(`found ${results.hits.total} items in ${results.took}ms`);
-        console.log(`returned article titles:`);
-        results.hits.hits.forEach(
-        (hit, index) => console.log(
-            `\t${++index} - ${hit._source.title}`
-        ));
+/* get mapping of index */
+const getMapping= function getMapping(index){
+    return esClient.indices.getMapping({
+        index: index
     })
-    .catch(console.error);
+    .then((resultMappings)=> {
+       console.log(JSON.stringify(resultMappings, null, 4));
+    });
 };
 
+/* ------------------ SEARCH ---------------- */
+
+/* Search all */
+const searchAll = function searchAll(index, body) {
+    return esClient.search({
+        index: index,
+        body: {
+            size: 10,
+            from: 0,
+            query: {
+                match_all: {}
+            }
+        }
+    });
+//    .then(results => {
+//         console.log(`found ${results.hits.total} items in ${results.took}ms`);
+//         console.log(`returned article titles:`);
+//         console.log(`actual results: ${JSON.stringify(results, null, 4)}`);
+//         results.hits.hits.forEach(
+//         (hit, index) => console.log(
+//             `\t${++index} - ${JSON.stringify(hit._source)}`
+//         ));
+//     });
+};
 
 
 
 const searchGameStats = function searchQuery(index, type, field, word){
     esClient.search({
             index: index,
-            type: type,
             body: {
                     query: {
                         match: {
-                            field : {
-                                query: word
-                                }
-                        },
+                            'summoner.name': {
+                                query: 'daduu',
+                            }
+                        }
                     }
                 }
-    },function (error, response,status) {
-        if (error){
-            console.log("search error: "+error);
-        }
-        else {
-            console.log("--- Response ---");
-            console.log(response);
-            console.log("--- Hits ---");
-            response.hits.hits.forEach(function(hit){
-                console.log(hit);
-            });
-        }
+    }).then(results => {
+        console.log("--- Results from search ---");
+        console.log(JSON.stringify(results, null, 4));
     });
 };
 
@@ -120,9 +150,11 @@ const searchGameStats = function searchQuery(index, type, field, word){
 //check status
 const checkStatus = function checkStatus() {
   return esClient.cat.indices({v: true})
-  .then(console.log)
-  .catch(err => console.error(`Error connecting to the es client: ${err}`));
+    .then(console.log)
+    .catch(err => console.error(`Error connecting to the es client: ${err}`));
 };
+
+
 
 
 module.exports = {
@@ -135,8 +167,45 @@ module.exports = {
 };
 
 
-GameStats.findAll({
-       include:[ {model: Champion}]
-   }).then(gameStats => {
-       checkStatus();
+
+
+
+
+deleteAllIndex('riot')
+.then((deleted) => {
+    console.log('deleted:', deleted);
+    return esClient.indices.exists({index:'riot'});
+})
+.then(exists=> {
+    console.log('exists', exists);
+   if(!exists){
+        return esClient.indices.create({'index': 'riot'});
+   }
+})
+.then((created)=> {
+    console.log('CREATED INDEX:', created);
+    if(created){
+        defineMapping();
+    }
+})
+.then(()=> {
+    return Summoner.findAll({
+        include: [ { model: GameStats,
+                include: [{model: Champion  } ]
+            }]
    });
+})
+.then(gameStats=> {
+    return bulkIndex('riot', 'summoners', gameStats);
+})
+.then(()=> {
+    checkStatus();
+})
+.catch(err => {
+    console.error('error occured when creating index', err);
+});
+
+
+
+
+

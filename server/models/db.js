@@ -27,4 +27,5 @@ module.exports = {
     db: db,
     Summoner: Summoner,
     Champion: Champion,
+    GameStats: GameStats
 };

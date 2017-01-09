@@ -3,8 +3,7 @@
 const router = require('express').Router();
 const Sequelize = require('sequelize');
 
-const Summoner = require('../models/summoner.model');
-const GameStats = require('../models/gameStats.model');
+const { Summoner, GameStats, Champion } = require('../models/db');
 const chalk = require('chalk');
 const envVariables = require('../../env.json');
 const axios = require('axios');
@@ -33,7 +32,7 @@ router.get('/summoners/all/count', (req, res, next) => {
 });
 
 //find all summoners by region
-router.get('/summoners/all/:region', (req, res, next) => {
+router.get('/summoners/all/region/:region', (req, res, next) => {
     const { region } = req.params;
     const riotKey = envVariables.riotApiKey;
 
@@ -115,5 +114,67 @@ router.get('/summoners/averageGameStats', (req, res, next) => {
         res.send(aggregate);
     });
 });
+
+
+//get all summoner info/gamestats/champion
+router.get('/summoners/allInfo/all', (req, res, next) => {
+    const { region } = req.params;
+   Summoner.findAll({
+        include: [ { model: GameStats,
+                include: [{model: Champion  } ]
+            }]
+   })
+   .then(result => {
+      res.send(result);
+   });
+});
+
+
+//get all summoner info/gamestats/champion given region
+router.get('/summoners/allInfo/region/:region', (req, res, next) => {
+    const { region } = req.params;
+   Summoner.findAll({
+        include: [ { model: GameStats,
+                include: [{model: Champion  } ]
+            }],
+        where: {region: region}
+   })
+   .then(result => {
+      res.send(result);
+   });
+});
+
+
+//get all summoner info/gamestats/champion given champion
+router.get('/summoners/allInfo/champion/:champion', (req, res, next) => {
+    const { champion } = req.params;
+   Summoner.findAll({
+        include: [ { model: GameStats,
+                include: [{model: Champion, where: {name: { $like:  champion} }  } ]
+            }]
+   })
+   .then(result => {
+      res.send(result);
+   });
+});
+
+
+//get all summoner info/gamestats/champion given champion, region
+router.get('/summoners/allInfo/regionAndChampion/:region/:champion', (req, res, next) => {
+    const { champion, region } = req.params;
+    console.log(champion);
+    console.time('Find player + all games + champions played');
+    Summoner.findAll({
+            include: [ { model: GameStats,
+                include: [{model: Champion, where: {name: { $like:  champion} }  } ]
+            }],
+            where: { region: region}
+   })
+   .then(result => {
+       console.timeEnd('Find player + all games + champions played');
+      res.send(result);
+   });
+});
+
 
 module.exports = router;

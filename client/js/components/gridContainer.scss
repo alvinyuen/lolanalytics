@@ -1,7 +1,7 @@
 
 
 
-.container {
+.mainContainer {
     width: 1200px;
     margin: 0 auto;
 }
@@ -9,3 +9,52 @@
 .signup-container {
    text-align:center;
 }
+
+.barContainer {
+
+}
+
+label {
+    float: left;
+}
+
+.selectors {
+    font-color: #444;
+    font-weight: 700;
+    float:right;
+    margin-left: 20px;
+}
+
+.regionSelector {
+    width: 150px;
+    margin: 5px 30px 0 5px;
+    float:left;
+}
+
+
+
+.championSelector {
+    width: 150px;
+    margin: 5px 0px 0 5px;
+    float:left;
+    overflow-y:scroll;
+}
+
+.summaryBox {
+    float: left;
+    line-height: 30px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #444;
+}
+
+.clearfix:after {
+    content:".";
+    visibility: hidden;
+    display:block;
+    clear:both;
+    height:0;
+}
+
+
+

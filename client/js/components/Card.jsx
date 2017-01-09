@@ -6,7 +6,7 @@ import {Link} from 'react-router';
 
 
 const Card = ({summoner}) => {
-    console.log('PROPS', summoner);
+
     return (
         <Link to="/playerStats"><div className="shoe-container">
             <div className="shoe-card">

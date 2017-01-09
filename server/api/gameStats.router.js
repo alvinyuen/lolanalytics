@@ -2,9 +2,8 @@
 
 const router = require('express').Router();
 const Sequelize = require('sequelize');
-const Summoner = require('../models/summoner.model');
-const GameStats = require('../models/gameStats.model');
-const Champion = require('../models/champions.model');
+
+const { Summoner, GameStats, Champion, } = require('../models/db');
 const GameChampions = require('../models/db').GameChampions;
 const chalk = require('chalk');
 const envVariables = require('../../env.json');
@@ -29,7 +28,7 @@ router.get('/summonerGameStats/count', (req, res, next) => {
 });
 
 
-/* find all game stats with summoner info */
+/* find all game stats with summoner info and champion info */
 router.get('/summonerGameStats/allWithSummoners', (req, res, next) => {
    GameStats.findAll({
        include:[{ model: Summoner}, {model: Champion}]
@@ -40,7 +39,7 @@ router.get('/summonerGameStats/allWithSummoners', (req, res, next) => {
 
 
 
-//find average stats given summoner
+//find average stats given summoner grouped by roles
 router.get('/summonerGameStats/summoner/:summonerId', (req, res, next) => {
     const { summonerId } = req.params;
    GameStats.findAll({

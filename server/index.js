@@ -37,6 +37,11 @@ app.use(require('./services/webscrapper-service'));
 //cron
 app.get(require('./services/cron'));
 
+//elasticsearch
+app.get(require('./services/elasticsearch'));
+
+
+
 // testing purposes
 // app.use('/*', (req, res, next) => {
 //     console.log('TESTING req.user =>', req.user);
@@ -57,6 +62,7 @@ app.get('/api/logout', (req, res, next) => {
 app.use('/api/riot', require('./api/search.router'));
 app.use('/api/riot', require('./api/summoners.router'));
 app.use('/api/riot', require('./api/gameStats.router'));
+app.use('/api/riot', require('./api/champions.router'));
 
 
 

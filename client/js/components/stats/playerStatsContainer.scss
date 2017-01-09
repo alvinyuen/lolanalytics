@@ -1,0 +1,25 @@
+
+
+.playerContainer {
+    width: 1300px;
+    margin: 0 auto;
+
+}
+
+.highCharts {
+    float: left;
+    margin: 10px;
+}
+
+.clearfix:after {
+    content:".";
+    visibility: hidden;
+    display:block;
+    clear:both;
+    height:0;
+}
+
+.bottomCharts {
+    width: 860px;
+    margin: 0 auto;
+}
