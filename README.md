@@ -5,6 +5,7 @@ Utilizing Riot's robust API, I wanted to use their API to analyze competitive pl
 Given limitations of the API calls, I used node-cron as a scheduler to collect challenger player stats at fixed time intervals.
 
 Backend: Node, Express, Sequelize, ElasticSearch
-Frontend - React, Redux, React HighCharts
+
+Frontend: - React, Redux, React HighCharts
 
 
