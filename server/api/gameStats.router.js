@@ -40,28 +40,54 @@ router.get('/summonerGameStats/allWithSummoners', (req, res, next) => {
 
 
 //find average stats given summoner grouped by roles
+/* change naming to not include average for front end display purposes */
 router.get('/summonerGameStats/summoner/:summonerId', (req, res, next) => {
     const { summonerId } = req.params;
    GameStats.findAll({
         attributes: [
                     'summonerId',
                     'role',
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.championsKilled')), 'averageChampionsKilled'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.numDeaths')), 'averageNumDeaths'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.assists')), 'averageAssists'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.turretsKilled')), 'averageTurretsKilled'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToBuildingsPerMin')), 'averageTotalDamageDealtToBuildings'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.minionsKilled')), 'averageMinionsKilled'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.goldEarned')), 'averageGoldEarned'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.neutralMinionsKilled')), 'averageNeutralMinionsKilled'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtPerMin')), 'averageTotalDamageDealt'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageTakenPerMin')), 'averageTotalDamageTaken'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToChampionsPerMin')), 'averageTotalDamageDealtToChampions'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.killingSprees')), 'averageKillingSprees'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.largestKillingSpree')), 'averageLargestKillingSpree'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.wardKilledPerFiveMin')), 'averageWardKilled'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.wardPlacedPerFiveMin')), 'averageWardPlaced'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.visionWardsBoughtPerFiveMin')), 'averageVisionWardsBought']
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.championsKilled')), 'ChampionsKilled'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.numDeaths')), 'NumDeaths'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.assists')), 'Assists'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.turretsKilled')), 'TurretsKilled'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToBuildingsPerMin')), 'TotalDamageDealtToBuildings'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.minionsKilled')), 'MinionsKilled'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.goldEarned')), 'GoldEarned'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.neutralMinionsKilled')), 'NeutralMinionsKilled'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtPerMin')), 'TotalDamageDealt'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageTakenPerMin')), 'TotalDamageTaken'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToChampionsPerMin')), 'TotalDamageDealtToChampions'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.killingSprees')), 'KillingSprees'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.largestKillingSpree')), 'LargestKillingSpree'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.wardKilledPerFiveMin')), 'WardKilled'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.wardPlacedPerFiveMin')), 'WardPlaced'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.visionWardsBoughtPerFiveMin')), 'VisionWardsBought']
+                    ],
+        // order: [[Sequelize.fn('AVG', Sequelize.col('championsKilled')), 'DESC']],
+        group:  ['summonerId', 'role'],
+        where: {
+            summonerId: summonerId
+        }
+
+    }).then(aggregate => {
+        res.send(aggregate);
+    });
+});
+
+router.get('/summonerGameStats/summoner/:summonerId/mainStats', (req, res, next) => {
+    const { summonerId } = req.params;
+   GameStats.findAll({
+        attributes: [
+                    'summonerId',
+                    'role',
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToBuildingsPerMin')), 'TotalDamageDealtToBuildings'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.minionsKilled')), 'MinionsKilled'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.goldEarned')), 'GoldEarned'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.neutralMinionsKilled')), 'NeutralMinionsKilled'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtPerMin')), 'TotalDamageDealt'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageTakenPerMin')), 'TotalDamageTaken'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToChampionsPerMin')), 'TotalDamageDealtToChampions'],
                     ],
         // order: [[Sequelize.fn('AVG', Sequelize.col('championsKilled')), 'DESC']],
         group:  ['summonerId', 'role'],
@@ -142,13 +168,13 @@ router.get('/summonerGameStats/averageByRole', (req, res, next) => {
                     [Sequelize.fn('AVG', Sequelize.col('gameStats.numDeaths')), 'averageNumDeaths'],
                     [Sequelize.fn('AVG', Sequelize.col('gameStats.assists')), 'averageAssists'],
                     [Sequelize.fn('AVG', Sequelize.col('gameStats.turretsKilled')), 'averageTurretsKilled'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToBuildingsPerMin')), 'averageTotalDamageDealtToBuildings'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.minionsKilled')), 'averageMinionsKilled'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.goldEarned')), 'averageGoldEarned'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.neutralMinionsKilled')), 'averageNeutralMinionsKilled'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtPerMin')), 'averageTotalDamageDealt'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageTakenPerMin')), 'averageTotalDamageTaken'],
-                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToChampionsPerMin')), 'averageTotalDamageDealtToChampions'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToBuildingsPerMin')), 'averageTotalDamageDealtToBuildings'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.minionsKilled')), 'averageMinionsKilled'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.goldEarned')), 'averageGoldEarned'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.neutralMinionsKilled')), 'averageNeutralMinionsKilled'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtPerMin')), 'averageTotalDamageDealt'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageTakenPerMin')), 'averageTotalDamageTaken'],
+                    // [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToChampionsPerMin')), 'averageTotalDamageDealtToChampions'],
                     [Sequelize.fn('AVG', Sequelize.col('gameStats.killingSprees')), 'averageKillingSprees'],
                     [Sequelize.fn('AVG', Sequelize.col('gameStats.largestKillingSpree')), 'averageLargestKillingSpree'],
                     [Sequelize.fn('AVG', Sequelize.col('gameStats.wardKilledPerFiveMin')), 'averageWardKilled'],
@@ -160,6 +186,28 @@ router.get('/summonerGameStats/averageByRole', (req, res, next) => {
         res.send(aggregate);
     });
 });
+
+
+/* find average stats grouped - damage - grouped by role */
+router.get('/summonerGameStats/averageByRole/mainStats', (req, res, next) => {
+   GameStats.findAll({
+        attributes: [
+                    'role',
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToBuildingsPerMin')), 'averageTotalDamageDealtToBuildings'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.minionsKilled')), 'averageMinionsKilled'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.goldEarned')), 'averageGoldEarned'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.neutralMinionsKilled')), 'averageNeutralMinionsKilled'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtPerMin')), 'averageTotalDamageDealt'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageTakenPerMin')), 'averageTotalDamageTaken'],
+                    [Sequelize.fn('AVG', Sequelize.col('gameStats.totalDamageDealtToChampionsPerMin')), 'averageTotalDamageDealtToChampions'],
+                    ],
+        group:  ['role']
+    }).then(aggregate => {
+        res.send(aggregate);
+    });
+});
+
+
 
 
 //find average stats for given role

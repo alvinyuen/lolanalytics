@@ -39,19 +39,19 @@ class SignupForm extends Component {
                             </div>
                             <form className="form" onSubmit={(e)=>{this.submitForm(e)}}>
                                 <div className="form-group">
-                                    <label >First Name</label>
+                                    <label className="form-label" >First Name</label>
                                     <input type="text" name="firstName" placeholder="First name" className="input" onChange={(e)=> {this.handleInput(e)}} />
                                 </div>
                                 <div className="form-group">
-                                    <label >Last Name</label>
+                                    <label className="form-label" >Last Name</label>
                                     <input type="text" name="lastName" placeholder="Last name" className="input" onChange={(e)=> {this.handleInput(e)}}  />
                                 </div>
                                 <div className="form-group">
-                                    <label >Email / Username</label>
+                                    <label className="form-label" >Email / Username</label>
                                     <input type="text" name="email" placeholder="Email" className="input" onChange={(e)=> {this.handleInput(e)}}  />
                                 </div>
                                 <div className="form-group">
-                                    <label >Password</label>
+                                    <label className="form-label">Password</label>
                                     <input type="password" name="password" className="input" placeholder="Password" onChange={(e)=> {this.handleInput(e)}}  />
                                 </div>
                                 <div className="form-group">

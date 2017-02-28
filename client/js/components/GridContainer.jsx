@@ -70,7 +70,7 @@ class GridContainer extends Component {
                             <option value="JP"> Japan </option>
                         </select>
                         <label >Champion :</label>
-                            <select size="5" className="championSelector" onChange={this.selectChampion}>
+                            <select size="3" className="championSelector" onChange={this.selectChampion}>
                                 <option value="ALL"> All Champions </option>
                                 {this.props.championNames.map((champion,i)=> {
                                 return <option key={i}>{champion.name}</option>

@@ -1,0 +1,1 @@
+## Competitive gamer analyzer on the popular game League of Legends

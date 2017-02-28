@@ -64,6 +64,9 @@ app.use('/api/riot', require('./api/summoners.router'));
 app.use('/api/riot', require('./api/gameStats.router'));
 app.use('/api/riot', require('./api/champions.router'));
 
+// -------- es routes --------- //
+app.use('/api/riot', require('./api-es/summoners.es.router'));
+
 
 
 

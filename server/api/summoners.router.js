@@ -119,12 +119,14 @@ router.get('/summoners/averageGameStats', (req, res, next) => {
 //get all summoner info/gamestats/champion
 router.get('/summoners/allInfo/all', (req, res, next) => {
     const { region } = req.params;
+    console.time('relational db total time took:');
    Summoner.findAll({
         include: [ { model: GameStats,
                 include: [{model: Champion  } ]
-            }]
+            }],
    })
    .then(result => {
+       console.timeEnd('relational db total time took:');
       res.send(result);
    });
 });
@@ -162,8 +164,8 @@ router.get('/summoners/allInfo/champion/:champion', (req, res, next) => {
 //get all summoner info/gamestats/champion given champion, region
 router.get('/summoners/allInfo/regionAndChampion/:region/:champion', (req, res, next) => {
     const { champion, region } = req.params;
-    console.log(champion);
-    console.time('Find player + all games + champions played');
+    // console.log(champion);
+    // console.time('Find player + all games + champions played');
     Summoner.findAll({
             include: [ { model: GameStats,
                 include: [{model: Champion, where: {name: { $like:  champion} }  } ]
@@ -171,7 +173,7 @@ router.get('/summoners/allInfo/regionAndChampion/:region/:champion', (req, res, 
             where: { region: region}
    })
    .then(result => {
-       console.timeEnd('Find player + all games + champions played');
+    //    console.timeEnd('Find player + all games + champions played');
       res.send(result);
    });
 });

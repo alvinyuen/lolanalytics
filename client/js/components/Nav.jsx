@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { logOut } from '../redux/loginStatus';
-import { searchForSummoner } from '../redux/singleSummoner';
+import { searchForSummoner } from '../redux/searchedSummoners';
 
 class Nav extends Component {
 

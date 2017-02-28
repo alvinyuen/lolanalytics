@@ -27,7 +27,7 @@ export default function userReducer (loggedInUser = {}, action){
 
 /* ------ dispatcher ------- */
 export const logInUser = (user) => dispatch => {
-    console.log('loggin in user');
+    console.log('loggin in user:', user);
     axios.post('/api/login', user)
     .then((res)=> res.data.message ? alert(res.data.message) : window.location.href="/")
     .catch( err => console.error(`log in user unsuccessful: ${err}`));

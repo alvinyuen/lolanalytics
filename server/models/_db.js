@@ -2,7 +2,7 @@
 
 var Sequelize = require('sequelize');
 
-const db = new Sequelize('postgres://localhost:5432/riotanalytics', {
+const db = new Sequelize('postgres://localhost:5432/riotanalyticsdemo', {
     logging: false
 });
 

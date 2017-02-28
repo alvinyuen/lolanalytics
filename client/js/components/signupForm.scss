@@ -40,13 +40,19 @@
 
 }
 
+.form-label {
+    width: 100%;
+}
+
+
+
 .facebook-button {
     margin: 10px;
     background-color: #3b5998;
     border-radius: 5px;
     color: white;
     height: 50px;
-    width: 400px;
+    width: 430px;
     font-size: 16px;
     border: none;
 }
@@ -57,7 +63,7 @@
     border-radius: 5px;
     color: white;
     height: 50px;
-    width: 400px;
+    width: 430px;
     font-size: 16px;
      border: none;
 }
@@ -82,4 +88,5 @@ button:focus {
 
 .password-label {
     color: black;
+    width: 100%;
 }

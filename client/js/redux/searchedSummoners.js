@@ -25,10 +25,19 @@ export default function searchedSummonersReducer ( searchedSummoners = [], actio
 
 /* ------ dispatcher ------- */
 export const updateSearchedSummoners = () => dispatch => {
-    axios.get(`/api/riot/summoners/allInfo/all`)
+    axios.get(`/api/riot/es/summoners/allInfo/all`)
     .then((res)=> dispatch(setSearchedSummoners(res.data)))
     .catch( err => console.error(`update searched summoners unsuccessful: ${err}`));
 };
+
+/* nav bar search single summoner */
+export const searchForSummoner = (summonerName, region) => dispatch => {
+    console.log('search summoner dispatcher');
+    axios.get(`/api/riot/search/summoner/${region}/${summonerName}`)
+    .then((res)=> dispatch(setSearchedSummoners([res.data])))
+    .catch( err => console.error(`single summoner search unsuccessful: ${err}`));
+};
+
 
 //with selected options
 export const updateSearchedSummonersWithOptions = (region, championName) => dispatch => {

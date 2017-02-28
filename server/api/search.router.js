@@ -30,6 +30,8 @@ router.get('/search/summoner/:region/:name', (req, res, next) => {
                 res.json(summoner);
             })
             .catch(next);
+       } else {
+           res.send(summoner);
        }
    });
 

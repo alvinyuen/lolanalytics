@@ -16,19 +16,19 @@ import {checkLoginStatus} from './redux/loginStatus';
 
 console.log('route jsx running...')
 
-const checkStatus = () => {
-    console.log('checking login status at root route');
-    store.dispatch(checkLoginStatus());
-}
+// const checkStatus = () => {
+//     console.log('checking login status at root route');
+//     store.dispatch(checkLoginStatus());
+// }
 
 ReactDOM.render(
     <Provider store={store}>
         <Router history={browserHistory}>
-            <Route path="/" component={AppContainer} onEnter={checkStatus}>
+            <Route path="/" component={AppContainer} >
                 <IndexRoute component={GridContainer}></IndexRoute>
                 <Route path="/signup" component={SignupForm}></Route>
                 <Route path="/login" component={LoginForm}></Route>
-                <Route path="/playerStats" component={PlayerStatsContainer}></Route>
+                <Route path="/playerStats/:summonerId" component={PlayerStatsContainer}></Route>
             </Route>
         </Router>
     </Provider>

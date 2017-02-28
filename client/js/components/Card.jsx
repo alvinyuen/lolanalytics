@@ -8,10 +8,11 @@ import {Link} from 'react-router';
 const Card = ({summoner}) => {
 
     return (
-        <Link to="/playerStats"><div className="shoe-container">
+        <Link to={`/playerStats/${summoner.id}`}><div className="shoe-container">
             <div className="shoe-card">
                     <div className="shoe-card-image" >
-                    <img src={`http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/${summoner.profileIconId}.png`}
+                    <img
+                    src={`http://ddragon.leagueoflegends.com/cdn/7.2.1/img/profileicon/${summoner.profileIconId}.png`}
                     />
                     </div>
 

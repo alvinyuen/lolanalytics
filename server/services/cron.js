@@ -12,55 +12,55 @@ const envVariables = require('../../env.json');
 const axios = require('axios');
 const riotKey = envVariables.riotApiKey;
 
-//change this to import match players from different region
-const region = 'NA';
+// //change this to import match players from different region
+const region = 'JP';
 
 
-//champion data
-(function(){
-    axios.get(`http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion.json`)
-    .then(result=> result.data.data)
-    .then(champions => {
-        for(var champ in champions){
-            Champion.create({
-                name: champions[champ].name,
-                championId: champions[champ].key
-            });
-        }
-    });
-})();
+// champion data
+// (function(){
+//     axios.get(`http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion.json`)
+//     .then(result=> result.data.data)
+//     .then(champions => {
+//         for(var champ in champions){
+//             Champion.create({
+//                 name: champions[champ].name,
+//                 championId: champions[champ].key
+//             });
+//         }
+//     });
+// })();
 
 
 
 
 
-//ranked solo 5x5 challenger ids
-(function() {
-    let challengerIds = [];
-    axios.get(` https://${region}.api.pvp.net/api/lol/${region}/v2.5/league/challenger?type=RANKED_SOLO_5x5&api_key=${riotKey}`)
-            .then(result => result.data)
-            .then(result => {
-                challengerIds = result.entries.map(challenger=> challenger.playerOrTeamId);
-                return challengerIds;
-            })
-            .then(challengerIds => {
-                const job = cron.schedule("*/3 * * * * *", () => {
+// //ranked solo 5x5 challenger ids
+// (function() {
+//     let challengerIds = [];
+//     axios.get(` https://${region}.api.pvp.net/api/lol/${region}/v2.5/league/challenger?type=RANKED_SOLO_5x5&api_key=${riotKey}`)
+//             .then(result => result.data)
+//             .then(result => {
+//                 challengerIds = result.entries.map(challenger=> challenger.playerOrTeamId);
+//                 return challengerIds;
+//             })
+//             .then(challengerIds => {
+//                 const job = cron.schedule("*/3 * * * * *", () => {
 
-                    let challengerId = challengerIds.splice(Math.floor(Math.random()*challengerIds.length), 1)[0];
-                    console.log('firing:', challengerId);
-                   getSummonerProfile(challengerId);
-                    getRecentGamePlayers(challengerId)
-                        .then(fellowPlayers => {
-                            fellowPlayers.forEach(fellowPlayer=> {
-                                if(challengerIds.indexOf(fellowPlayer)===-1)
-                                    challengerIds.push(fellowPlayer);
-                            });
-                            console.log('id length:', challengerIds.length);
-                    });
-                });
-                job.start();
-            });
-})();
+//                     let challengerId = challengerIds.splice(Math.floor(Math.random()*challengerIds.length), 1)[0];
+//                     console.log('firing:', challengerId);
+//                    getSummonerProfile(challengerId);
+//                     getRecentGamePlayers(challengerId)
+//                         .then(fellowPlayers => {
+//                             fellowPlayers.forEach(fellowPlayer=> {
+//                                 if(challengerIds.indexOf(fellowPlayer)===-1)
+//                                     challengerIds.push(fellowPlayer);
+//                             });
+//                             console.log('id length:', challengerIds.length);
+//                     });
+//                 });
+//                 job.start();
+//             });
+// })();
 
 
 //summoner profile
@@ -129,6 +129,8 @@ const getPlayerRole = (stats) => {
     else
         return null;
 };
+
+
 
 
 
